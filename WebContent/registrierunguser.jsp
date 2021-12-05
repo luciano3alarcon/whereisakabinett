@@ -43,7 +43,8 @@
 			<h2>${warnungAnNutzer}</h2>
 
 			<table id="tabelleBreit">
-				<h3>Please complete your register</h3>
+				<h3>Your register</h3>
+				
 				<tr>
 					<td id="linkSpalte">id</td>
 					<td id="rechtSpalte"><input type="text" id="id"
@@ -52,13 +53,13 @@
 				<tr>
 					<td id="linkSpalte">username</td>
 					<td id="rechtSpalte"><input type="text" id="username"
-						placeholder="username" readonly="readonly"
+						placeholder="username" 
 						value="${datenNutzer.username}" /></td>
 				</tr>
 				<tr>
 					<td id="linkSpalte">email</td>
 					<td id="rechtSpalte"><input type="text" id="email"
-						placeholder="email" value="${datenNutzer.emailadresse}" /></td>
+						placeholder="email" readonly="readonly" value="${datenNutzer.emailadresse}" /></td>
 				</tr>
 				<tr>
 					<td id="linkSpalte">name</td>

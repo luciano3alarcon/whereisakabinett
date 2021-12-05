@@ -19,21 +19,61 @@ public class DaoRegistrierterNutzer {
 		connection = SingleConnection.getConnection();
 	}
 
-	public List zeigNutzer(BeanRegister Nutzer) throws Exception {
+	public BeanRegister showNutzer(String id) throws Exception {
 
-		List<BeanRegister> zeigNutzer = new ArrayList<BeanRegister>();
-		String sqlQuery = "SELECT * FROM registrierung;";
+		String searchNutzerById = "SELECT * FROM registrierung WHERE id = '" + id + "';";
 
-		PreparedStatement queryListe = this.connection.prepareStatement(sqlQuery);
-		ResultSet resultSet = queryListe.executeQuery();
+		PreparedStatement queryListe = connection.prepareStatement(searchNutzerById);
+		ResultSet result = queryListe.executeQuery();
 
-		while (resultSet.next()) {
+		if (result.next()) {
 
-			BeanRegister beanRegister = new BeanRegister();
+			BeanRegister nutzerDaten = new BeanRegister();
+			nutzerDaten.setUsername(result.getString("username"));
+			nutzerDaten.setName(result.getString("name"));
+			nutzerDaten.setVorname(result.getString("vorname"));
+			nutzerDaten.setStadt(result.getString("stadt"));
+			nutzerDaten.setGeschlecht(result.getString("geschlecht"));
+			nutzerDaten.setBeautifull(result.getString("beautifull"));
+			nutzerDaten.setNewsletter(result.getString("newsletter"));
+			nutzerDaten.setEmailadresse(result.getString("email"));
+			nutzerDaten.setId(result.getInt("id"));
 
+			return nutzerDaten;
+		}
+		return null;
+	}
+
+	public void updatenDatenNutzer(BeanRegister nutzerDaten) throws Exception {
+
+		String queryNutzerUpdaten = "UPDATE registrierung SET username=?, name=?, vorname=?, stadt=?, geschlecht=?, beautifull=?, newsletter=?, email=?, id=? WHERE id= '"
+				+ nutzerDaten.getId() + "';";
+
+		try {
+			PreparedStatement statementPrepared = this.connection.prepareStatement(queryNutzerUpdaten);
+			statementPrepared.setString(1, nutzerDaten.getUsername());
+			statementPrepared.setString(2, nutzerDaten.getName());
+			statementPrepared.setString(3, nutzerDaten.getVorname());
+			statementPrepared.setString(4, nutzerDaten.getStadt());
+			statementPrepared.setString(5, nutzerDaten.getGeschlecht());
+			statementPrepared.setString(6, nutzerDaten.getBeautifull());
+			statementPrepared.setString(7, nutzerDaten.getNewsletter());
+			statementPrepared.setString(8, nutzerDaten.getEmailadresse());
+			statementPrepared.setInt(9, nutzerDaten.getId());
+
+			statementPrepared.executeUpdate();
+			connection.commit();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+
+			try {
+				connection.rollback();
+			} catch (SQLException e1) {
+				e1.printStackTrace();
+			}
 		}
 
-		return zeigNutzer;
 	}
 
 	public List<BeanRegister> nutzerInderDBSpeichern() throws Exception {
